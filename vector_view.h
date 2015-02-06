@@ -61,7 +61,7 @@ public:
 	}
 
 	bool empty() const {
-		return size() != 0;
+		return size() == 0;
 	}
 
 	const vector<T>& get_vector() const {

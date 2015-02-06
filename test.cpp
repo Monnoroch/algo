@@ -2,8 +2,10 @@
 #include "vector.h"
 #include "vector_view.h"
 #include "list.h"
+#include "dlist.h"
 #include "heap.h"
 #include "pair.h"
+#include "search.h"
 #include "sort.h"
 
 #include <iostream>
@@ -90,6 +92,27 @@ static void list_test() {
 	assert(lst.back() == N - D);
 }
 
+static void dlist_test() {
+	const auto N = 1000;
+	const auto D = 100;
+	dlist<int> lst;
+	for (size_t i = 0; i <= N; ++i) {
+		lst.push_back(i);
+	}
+
+	assert(lst.size() == N + 1);
+	assert(lst[0] == 0);
+	assert(lst[27] == 27);
+	assert(lst.back() == N);
+
+	for (size_t i = 0; i < D; ++i) {
+		lst.pop_back();
+	}
+
+	assert(lst.size() == N - D + 1);
+	assert(lst.back() == N - D);
+}
+
 static void heap_test() {
 	const auto N = 1000;
 	heap<int> h;
@@ -115,6 +138,30 @@ static void heap_test() {
 		assert(max.first == N - i);
 		assert(max.second.v == i);
 	}
+}
+
+static void search_test() {
+	const auto N = 1000;
+	{
+
+		vector<int> vec;
+		for (size_t i = 0; i <= N; ++i) {
+			vec.push_back(i);
+		}
+		assert(linear_search(vec, 44) == &vec[44]);
+		assert(linear_search(vec, 2000) == nullptr);
+		assert(binary_search(vec, 44) == &vec[44]);
+		assert(binary_search(vec, 2000) == nullptr);
+	}
+	{
+		vector<int> vec;
+		for (size_t i = 0; i <= N; ++i) {
+			vec.push_back(N - i);
+		}
+		assert(linear_search(vec, 44) == &vec[N - 44]);
+		assert(linear_search(vec, 2000) == nullptr);
+	}
+
 }
 
 template<typename T>
@@ -189,8 +236,10 @@ static void sort_test() {
 void tests() {
 	vector_test();
 	vector_view_test();
+	dlist_test();
 	list_test();
 	heap_test();
+	search_test();
 	sort_test();
 }
 

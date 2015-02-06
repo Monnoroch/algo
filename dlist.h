@@ -8,10 +8,10 @@
 namespace algo {
 
 template<typename T>
-class list {
+class dlist {
 public:
 	struct node {
-		friend class list;
+		friend class dlist;
 		node() = default;
 		node(const node&) = delete;
 		node(node&&) = default;
@@ -21,27 +21,29 @@ public:
 
 		node(const T& v) : val(v) {}
 		node(const T& v, std::unique_ptr<node> n) : val(v), next(std::move(n)) {}
+		node(const T& v, std::unique_ptr<node> n, node * p) : val(v), next(std::move(n)), prev(p) {}
 
 	private:
 		T val{};
 		std::unique_ptr<node> next{};
+		node * prev{nullptr};
 	};
 
-	list() = default;
+	dlist() = default;
 
-	list(const list& r) {
+	dlist(const dlist& r) {
 		set(r);
 	}
 
-	list(list&&) = default;
-	~list() = default;
+	dlist(dlist&&) = default;
+	~dlist() = default;
 
-	list& operator=(const list& r) {
+	dlist& operator=(const dlist& r) {
 		head = nullptr;
 		set(r);
 	}
 
-	list& operator=(list&&) = default;
+	dlist& operator=(dlist&&) = default;
 
 	void push_back(const T& val) {
 		if (head == nullptr) {
@@ -52,11 +54,11 @@ public:
 		}
 	}
 
-	void push_back(list<T> v) {
+	void push_back(dlist<T> v) {
 		push_back(std::move(v));
 	}
 
-	void push_back(list<T>&& v) {
+	void push_back(dlist<T>&& v) {
 		if (head == nullptr) {
 			head = std::move(v.head);
 			last = std::move(v.last);
@@ -73,7 +75,8 @@ public:
 
 	T pop_back() {
 		auto res = std::move(last->val);
-		fix_last(); // because it's single-linked
+		last->prev->next = nullptr;
+		last = last->prev;
 		--len;
 		return res;
 	}
@@ -90,7 +93,7 @@ public:
 		return len;
 	}
 
-	void swap(list<T>& r) {
+	void swap(dlist<T>& r) {
 		std::swap(head, r.head);
 		std::swap(last, r.last);
 		std::swap(len, r.len);
@@ -131,19 +134,6 @@ public:
 	}
 
 private:
-	void fix_last() {
-		auto * tmp = head.get();
-		while (tmp != nullptr) {
-			if (tmp->next.get() == last) {
-				last = tmp;
-				tmp->next = nullptr;
-				return;
-			}
-			tmp = tmp->next.get();
-		}
-		assert(false);
-	}
-
 	void push_back_empty(const T& val) {
 		head = std::make_unique<node>(val);
 		last = head.get();
@@ -152,11 +142,12 @@ private:
 
 	void push_back_nonempty(const T& val) {
 		last->next = std::make_unique<node>(val);
+		last->next->prev = last;
 		last = last->next.get();
 		++len;
 	}
 
-	void set(const list<T>& r) {
+	void set(const dlist<T>& r) {
 		if (r.empty()) {
 			return;
 		}
