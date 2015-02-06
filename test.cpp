@@ -1,7 +1,11 @@
 #include "test.h"
 #include "vector.h"
 #include "vector_view.h"
+#include "heap.h"
+#include "pair.h"
 #include "sort.h"
+
+#include <iostream>
 
 
 namespace algo {
@@ -45,14 +49,36 @@ static void vector_view_test() {
 	assert(view[view.size() - 1] == vec[200 - 1]);
 }
 
-static void sort_test() {
+static void heap_test() {
 	const auto N = 1000;
-	vector<int> vec;
+	heap<int> h;
 	for (size_t i = 0; i <= N; ++i) {
-		vec.push_back(N - i);
+		h.push(i);
+	}
+	for (size_t i = 0; i <= N; ++i) {
+		assert(h.pop_max() == N - i);
 	}
 
-	assert(!check_sorted(vec));
+	struct data {
+		data() = default;
+		data(int v_) : v(v_) {}
+ 		int v{0};
+	};
+
+	heap<pair<int, data>> hd;
+	for (size_t i = 0; i <= N; ++i) {
+		hd.push(i, N - i);
+	}
+	for (size_t i = 0; i <= N; ++i) {
+		auto max = hd.pop_max();
+		assert(max.first == N - i);
+		assert(max.second.v == i);
+	}
+}
+
+template<typename T>
+static void sort_test(const vector<T>& vec, bool sorted = false) {
+	assert(sorted == check_sorted(vec));
 	{
 		auto tmp = vec;
 		selection_sort(tmp);
@@ -93,11 +119,36 @@ static void sort_test() {
 		nocopy_quick_sort(tmp, middle_pivot_strategy<int>);
 		assert(check_sorted(tmp));
 	}
+	{
+		auto tmp = vec;
+		heap_sort(tmp);
+		assert(check_sorted(tmp));
+	}
+}
+
+static void sort_test() {
+	const auto N = 1000;
+	{
+
+		vector<int> vec;
+		for (size_t i = 0; i <= N; ++i) {
+			vec.push_back(i);
+		}
+		sort_test(vec, true);
+	}
+	{
+		vector<int> vec;
+		for (size_t i = 0; i <= N; ++i) {
+			vec.push_back(N - i);
+		}
+		sort_test(vec);
+	}
 }
 
 void tests() {
 	vector_test();
 	vector_view_test();
+	heap_test();
 	sort_test();
 }
 

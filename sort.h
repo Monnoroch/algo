@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "vector.h"
+#include "heap.h"
 
 
 namespace algo {
@@ -206,6 +207,14 @@ void nocopy_quick_sort(vector<T>& v, PS&& ps) {
 template<typename T>
 void nocopy_quick_sort(vector<T>& v) {
 	nocopy_quick_sort(v, random_pivot_strategy<T>);
+}
+
+template<typename T>
+void heap_sort(vector<T>& v) {
+	heap<T> h(v);
+	for (int i = h.size() - 1; i >= 0; --i) {
+		v[i] = h.pop_max();
+	}
 }
 
 }

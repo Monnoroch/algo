@@ -10,11 +10,6 @@ template<typename T>
 class vector {
 public:
 	vector() = default;
-	vector(size_t l, const T& val) : cap(l), len(l), arr(new T[cap]) {
-		for (size_t i = 0; i < len; ++i) {
-			arr[i] = val;
-		}
-	}
 
 	vector(const vector<T>& v) {
 		cp(v);
@@ -35,6 +30,18 @@ public:
 
 	vector<T>& operator=(vector<T>&& v) {
 		mv(std::move(v));
+	}
+
+	vector(size_t l, const T& val) : cap(l), len(l), arr(new T[cap]) {
+		for (size_t i = 0; i < len; ++i) {
+			arr[i] = val;
+		}
+	}
+
+	explicit vector(vector_view<T> v) : cap(v.get_vector().capacity()), len(v.size()), arr(new T[cap]) {
+		for (size_t i = 0; i < len; ++i) {
+			arr[i] = v[i];
+		}
 	}
 
 	const T& operator[](size_t n) const {
@@ -61,6 +68,19 @@ public:
 		++len;
 	}
 
+	const T& back() const {
+		return arr[len - 1];
+	}
+
+	T& back()  {
+		return arr[len - 1];
+	}
+
+	void pop_back() {
+		arr[len - 1] = T{}; // delete
+		--len;
+	}
+
 	void reserve(size_t s) {
 		if (s <= cap) {
 			return;
@@ -85,10 +105,10 @@ public:
 	}
 
 	void clear() {
-		drop();
+		for (size_t i = 0; i < len; ++i) {
+			arr[i] = T{};
+		}
 		len = 0;
-		cap = 0;
-		arr = nullptr;
 	}
 
 	vector_view<T> view(size_t from, size_t to) {
@@ -99,12 +119,22 @@ public:
 		return view(from, size());
 	}
 
-	vector_view<const T> view(size_t from, size_t to) const {
-		return vector_view<const T>(*this, from, to);
+	const vector_view<T> view(size_t from, size_t to) const {
+		return vector_view<T>(*this, from, to);
 	}
 
-	vector_view<const T> view(size_t from = 0) const {
+	const vector_view<T> view(size_t from = 0) const {
 		return view(from, size());
+	}
+
+	bool empty() const {
+		return len == 0;
+	}
+
+	void swap(vector<T>& v) {
+		std::swap(len, v.len);
+		std::swap(cap, v.cap);
+		std::swap(arr, v.arr);
 	}
 
 private:
