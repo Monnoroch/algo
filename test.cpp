@@ -1,6 +1,7 @@
 #include "test.h"
 #include "vector.h"
 #include "vector_view.h"
+#include "list.h"
 #include "heap.h"
 #include "pair.h"
 #include "sort.h"
@@ -33,6 +34,25 @@ static void vector_test() {
 
 	v1.clear();
 	assert(v1.size() == 0);
+
+	const auto N = 1000;
+	const auto D = 100;
+	list<int> vec;
+	for (size_t i = 0; i <= N; ++i) {
+		vec.push_back(i);
+	}
+
+	assert(vec.size() == N + 1);
+	assert(vec[0] == 0);
+	assert(vec[27] == 27);
+	assert(vec.back() == N);
+
+	for (size_t i = 0; i < D; ++i) {
+		vec.pop_back();
+	}
+
+	assert(vec.size() == N - D + 1);
+	assert(vec.back() == N - D);
 }
 
 static void vector_view_test() {
@@ -47,6 +67,27 @@ static void vector_view_test() {
 	assert(view.size() == 100);
 	assert(view[0] == vec[100]);
 	assert(view[view.size() - 1] == vec[200 - 1]);
+}
+
+static void list_test() {
+	const auto N = 1000;
+	const auto D = 100;
+	list<int> lst;
+	for (size_t i = 0; i <= N; ++i) {
+		lst.push_back(i);
+	}
+
+	assert(lst.size() == N + 1);
+	assert(lst[0] == 0);
+	assert(lst[27] == 27);
+	assert(lst.back() == N);
+
+	for (size_t i = 0; i < D; ++i) {
+		lst.pop_back();
+	}
+
+	assert(lst.size() == N - D + 1);
+	assert(lst.back() == N - D);
 }
 
 static void heap_test() {
@@ -148,6 +189,7 @@ static void sort_test() {
 void tests() {
 	vector_test();
 	vector_view_test();
+	list_test();
 	heap_test();
 	sort_test();
 }
