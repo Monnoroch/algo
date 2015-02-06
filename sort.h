@@ -103,8 +103,69 @@ void merge_sort(vector<T>& v) {
 	merge_sort(v.view());
 }
 
+template<typename T>
+T middle_pivot_strategy(vector_view<T> v) {
+	return v[v.size() / 2];
+}
+
+template<typename T>
+T random_pivot_strategy(vector_view<T> v) {
+	return v[rand() % v.size()];
+}
+
 template<typename T, typename PS>
 void quick_sort(vector_view<T> v, PS&& ps) {
+	if (v.size() <= 1) {
+		return;
+	}
+
+	const auto pivot = ps(v);
+	int i = 0;
+	int j = static_cast<int>(v.size()) - 1;
+	vector<T> left, right;
+	size_t eq_cnt = 0;
+	for (size_t i = 0; i < v.size(); ++i) {
+		if (v[i] < pivot) {
+			left.push_back(v[i]);
+		}
+		else if (v[i] > pivot) {
+			right.push_back(v[i]);
+		}
+		else {
+			++eq_cnt;
+		}
+	}
+
+	if (left.size() != 0) {
+		quick_sort(left, ps);
+	}
+	if (right.size() != 0) {
+		quick_sort(right, ps);
+	}
+
+	for (size_t i = 0; i < left.size(); ++i) {
+		v[i] = left[i];
+	}
+	for (size_t i = 0; i < eq_cnt; ++i) {
+		v[left.size() + i] = pivot;
+	}
+	for (size_t i = 0; i < right.size(); ++i) {
+		v[left.size() + eq_cnt + i] = right[i];
+	}
+}
+
+template<typename T, typename PS>
+void quick_sort(vector<T>& v, PS&& ps) {
+	quick_sort(v.view(), std::forward<PS>(ps));
+}
+
+template<typename T>
+void quick_sort(vector<T>& v) {
+	quick_sort(v, random_pivot_strategy<T>);
+}
+
+template<typename T, typename PS>
+void nocopy_quick_sort(vector_view<T> v, PS&& ps) {
 	if (v.size() <= 1) {
 		return;
 	}
@@ -137,24 +198,14 @@ void quick_sort(vector_view<T> v, PS&& ps) {
 	}
 }
 
-template<typename T>
-T middle_pivot_strategy(vector_view<T> v) {
-	return v[v.size() / 2];
-}
-
-template<typename T>
-T random_pivot_strategy(vector_view<T> v) {
-	return v[rand() % v.size()];
-}
-
 template<typename T, typename PS>
-void quick_sort(vector<T>& v, PS&& ps) {
-	quick_sort(v.view(), std::forward<PS>(ps));
+void nocopy_quick_sort(vector<T>& v, PS&& ps) {
+	nocopy_quick_sort(v.view(), std::forward<PS>(ps));
 }
 
 template<typename T>
-void quick_sort(vector<T>& v) {
-	quick_sort(v, random_pivot_strategy<T>);
+void nocopy_quick_sort(vector<T>& v) {
+	nocopy_quick_sort(v, random_pivot_strategy<T>);
 }
 
 }

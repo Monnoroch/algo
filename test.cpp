@@ -83,6 +83,16 @@ static void sort_test() {
 		quick_sort(tmp, middle_pivot_strategy<int>);
 		assert(check_sorted(tmp));
 	}
+	{
+		auto tmp = vec;
+		nocopy_quick_sort(tmp);
+		assert(check_sorted(tmp));
+	}
+	{
+		auto tmp = vec;
+		nocopy_quick_sort(tmp, middle_pivot_strategy<int>);
+		assert(check_sorted(tmp));
+	}
 }
 
 void tests() {
