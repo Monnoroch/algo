@@ -69,7 +69,7 @@ void merge(vector_view<T> l, vector_view<T> r) {
 	vector<T> vec(size, 0);
 	size_t lidx = 0, ridx = 0;
 	for (size_t idx = 0; idx < size; ++idx) {
-		if (ridx < r.size() && r[ridx] < l[lidx]) {
+		if (lidx >= l.size() || (ridx < r.size() && r[ridx] < l[lidx])) {
 			vec[idx] = r[ridx];
 			++ridx;
 		} else {
@@ -215,6 +215,48 @@ void heap_sort(vector<T>& v) {
 	for (int i = h.size() - 1; i >= 0; --i) {
 		v[i] = h.pop_max();
 	}
+}
+
+template<typename T>
+void counting_sort(vector<T>& v, T min, T max) {
+	size_t counts[max - min + 1];
+	for (size_t i = 0; i < max - min; ++i) {
+		counts[i] = 0;
+	}
+
+	for (size_t i = 0; i < v.size(); ++i) {
+		++counts[v[i] - min];
+	}
+
+	size_t total = 0;
+	for (size_t i = 0; i <= max - min; ++i) {
+		auto cnt = counts[i];
+		counts[i] = total;
+		total += cnt;
+	}
+
+	vector<T> out(v.size(), 0);
+	for (size_t i = 0; i < v.size(); ++i) {
+		auto key = v[i] - min;
+		out[counts[key]] = v[i];
+		++counts[key];
+	}
+	v = out;
+}
+
+template<typename T>
+void counting_sort(vector<T>& v) {
+	auto min = v[0];
+	auto max = v[0];
+	for (size_t i = 1; i < v.size(); ++i) {
+		if (v[i] > max) {
+			max = v[i];
+		}
+		else if (v[i] < min) {
+			min = v[i];
+		}
+	}
+	return counting_sort(v, min, max);
 }
 
 }

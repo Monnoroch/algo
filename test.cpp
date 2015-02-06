@@ -212,6 +212,11 @@ static void sort_test(const vector<T>& vec, bool sorted = false) {
 		heap_sort(tmp);
 		assert(check_sorted(tmp));
 	}
+	{
+		auto tmp = vec;
+		counting_sort(tmp);
+		assert(check_sorted(tmp));
+	}
 }
 
 static void sort_test() {
@@ -228,6 +233,13 @@ static void sort_test() {
 		vector<int> vec;
 		for (size_t i = 0; i <= N; ++i) {
 			vec.push_back(N - i);
+		}
+		sort_test(vec);
+	}
+	{
+		vector<int> vec;
+		for (size_t i = 0; i <= N; ++i) {
+			vec.push_back(rand() % 1000);
 		}
 		sort_test(vec);
 	}
