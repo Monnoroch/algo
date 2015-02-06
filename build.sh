@@ -1,0 +1,1 @@
+g++ main.cpp test.cpp -std=c++1y -ggdb2 -O0 -o main
