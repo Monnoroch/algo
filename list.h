@@ -58,11 +58,11 @@ public:
 		return tmp->val;
 	}
 
-	void push_front(list<T> v) {
+	void push_front(list v) {
 		push_front(std::move(v));
 	}
 
-	void push_front(list<T>&& v) {
+	void push_front(list&& v) {
 		if (v.empty()) {
 			return;
 		}
@@ -91,7 +91,7 @@ public:
 		return len;
 	}
 
-	void swap(list<T>& r) {
+	void swap(list& r) {
 		std::swap(head, r.head);
 		std::swap(len, r.len);
 	}
@@ -131,7 +131,7 @@ public:
 	}
 
 private:
-	void set(const list<T>& r) {
+	void set(const list& r) {
 		if (r.empty()) {
 			return;
 		}

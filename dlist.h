@@ -63,11 +63,11 @@ public:
 		return tmp->val;
 	}
 
-	void push_front(dlist<T> v) {
+	void push_front(dlist v) {
 		push_front(std::move(v));
 	}
 
-	void push_front(dlist<T>&& v) {
+	void push_front(dlist&& v) {
 		if (v.empty()) {
 			return;
 		}
@@ -101,11 +101,11 @@ public:
 		}
 	}
 
-	void push_back(dlist<T> v) {
+	void push_back(dlist v) {
 		push_back(std::move(v));
 	}
 
-	void push_back(dlist<T>&& v) {
+	void push_back(dlist&& v) {
 		if (head == nullptr) {
 			head = std::move(v.head);
 			last = std::move(v.last);
@@ -140,7 +140,7 @@ public:
 		return len;
 	}
 
-	void swap(dlist<T>& r) {
+	void swap(dlist& r) {
 		std::swap(head, r.head);
 		std::swap(last, r.last);
 		std::swap(len, r.len);
@@ -194,7 +194,7 @@ private:
 		++len;
 	}
 
-	void set(const dlist<T>& r) {
+	void set(const dlist& r) {
 		if (r.empty()) {
 			return;
 		}

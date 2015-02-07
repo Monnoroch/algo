@@ -13,11 +13,11 @@ public:
 
 	vector() = default;
 
-	vector(const vector<T>& v) {
+	vector(const vector& v) {
 		cp(v);
 	}
 
-	vector(vector<T>&& v) {
+	vector(vector&& v) {
 		mv(std::move(v));
 	}
 
@@ -25,12 +25,12 @@ public:
 		drop();
 	}
 
-	vector<T>& operator=(const vector<T>& v) {
+	vector& operator=(const vector& v) {
 		drop();
 		cp(v);
 	}
 
-	vector<T>& operator=(vector<T>&& v) {
+	vector& operator=(vector&& v) {
 		mv(std::move(v));
 	}
 
@@ -133,7 +133,7 @@ public:
 		return len == 0;
 	}
 
-	void swap(vector<T>& v) {
+	void swap(vector& v) {
 		std::swap(len, v.len);
 		std::swap(cap, v.cap);
 		std::swap(arr, v.arr);
@@ -144,7 +144,7 @@ private:
 		delete [] arr;
 	}
 
-	void cp(const vector<T>& v) {
+	void cp(const vector& v) {
 		len = v.len;
 		cap = v.cap;
 		arr = new T[cap];
@@ -153,7 +153,7 @@ private:
 		}
 	}
 
-	void mv(vector<T>&& v) {
+	void mv(vector&& v) {
 		std::swap(len, v.len);
 		std::swap(cap, v.cap);
 		std::swap(arr, v.arr);

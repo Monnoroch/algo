@@ -12,11 +12,11 @@ template<typename T>
 class vector_view {
 public:
 	vector_view() = delete;
-	vector_view(const vector_view<T>&) = default;
-	vector_view(vector_view<T>&&) = default;
+	vector_view(const vector_view&) = default;
+	vector_view(vector_view&&) = default;
 	~vector_view() = default;
-	vector_view& operator=(const vector_view<T>& v) = delete;
-	vector_view& operator=(vector_view<T>&& v) = delete;
+	vector_view& operator=(const vector_view& v) = delete;
+	vector_view& operator=(vector_view&& v) = delete;
 
 	vector_view(vector<T>& v, size_t f, size_t t) : vec(v), from(f), to(t) {
 		assert(from <= v.size());
@@ -44,19 +44,19 @@ public:
 		return vec[from + n];
 	}
 
-	vector_view<T> view(size_t f, size_t t) {
-		return vector_view<T>(vec, from + f, from + t);
+	vector_view view(size_t f, size_t t) {
+		return vector_view(vec, from + f, from + t);
 	}
 
-	vector_view<T> view(size_t f = 0) {
+	vector_view view(size_t f = 0) {
 		return view(f, size());
 	}
 
-	const vector_view<T> view(size_t f, size_t t) const {
-		return vector_view<T>(vec, from + f, from + t);
+	const vector_view view(size_t f, size_t t) const {
+		return vector_view(vec, from + f, from + t);
 	}
 
-	const vector_view<T> view(size_t f = 0) const {
+	const vector_view view(size_t f = 0) const {
 		return view(f, size());
 	}
 

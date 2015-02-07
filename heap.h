@@ -15,11 +15,11 @@ public:
 	using type = T;
 
 	heap() = default;
-	heap(const heap<T>&) = default;
-	heap(heap<T>&&) = default;
+	heap(const heap&) = default;
+	heap(heap&&) = default;
 	~heap() = default;
-	heap<T>& operator=(const heap<T>&) = default;
-	heap<T>& operator=(heap<T>&&) = default;
+	heap& operator=(const heap&) = default;
+	heap& operator=(heap&&) = default;
 
 	explicit heap(const vector_view<T>& v) : data(v) {
 		for (int i = v.size() / 2; i >= 0; --i) {
@@ -56,7 +56,7 @@ public:
 		return data.empty();
 	}
 
-	void swap(heap<T>& h) {
+	void swap(heap& h) {
 		std::swap(data, h.data);
 	}
 
@@ -111,11 +111,11 @@ public:
 	// code from here is the exact copy of a generic heap template.
 public:
 	heap() = default;
-	heap(const heap<T>&) = default;
-	heap(heap<T>&&) = default;
+	heap(const heap&) = default;
+	heap(heap&&) = default;
 	~heap() = default;
-	heap<T>& operator=(const heap<T>&) = default;
-	heap<T>& operator=(heap<T>&&) = default;
+	heap& operator=(const heap&) = default;
+	heap& operator=(heap&&) = default;
 
 	explicit heap(const vector_view<T>& v) : data(v) {
 		for (int i = v.size() / 2; i >= 0; --i) {
@@ -152,7 +152,7 @@ public:
 		return data.empty();
 	}
 
-	void swap(heap<T>& h) {
+	void swap(heap& h) {
 		std::swap(data, h.data);
 	}
 

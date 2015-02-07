@@ -10,14 +10,13 @@ namespace algo {
 template<typename T, template<typename> class C>
 class stack: public C<T> {
 	using B = C<T>;
-	using self = stack<T, C>;
 public:
 	stack() = default;
-	stack(const self& v) = default;
-	stack(self&& v) = default;
+	stack(const stack& v) = default;
+	stack(stack&& v) = default;
 	~stack() = default;
-	self& operator=(const self& v) = default;
-	self& operator=(self&& v) = default;
+	stack& operator=(const stack& v) = default;
+	stack& operator=(stack&& v) = default;
 
 	bool empty() const {
 		return B::empty();
@@ -43,14 +42,13 @@ public:
 template<typename T>
 class stack<T, vector>: private vector<T> {
 	using B = vector<T>;
-	using self = stack<T, vector>;
 public:
 	stack() = default;
-	stack(const self& v) = default;
-	stack(self&& v) = default;
+	stack(const stack& v) = default;
+	stack(stack&& v) = default;
 	~stack() = default;
-	self& operator=(const self& v) = default;
-	self& operator=(self&& v) = default;
+	stack& operator=(const stack& v) = default;
+	stack& operator=(stack&& v) = default;
 
 	bool empty() const {
 		return B::empty();
