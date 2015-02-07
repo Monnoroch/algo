@@ -12,6 +12,8 @@ namespace algo {
 template<typename T>
 class heap {
 public:
+	using type = T;
+
 	heap() = default;
 	heap(const heap<T>&) = default;
 	heap(heap<T>&&) = default;
@@ -100,6 +102,8 @@ template<typename K, typename V>
 class heap<pair<K, V>> {
 	using T = pair<K, V>;
 public:
+	using type = T;
+
 	void push(const K& key, const V& value) {
 		push(pair<K, V>(key, value));
 	}

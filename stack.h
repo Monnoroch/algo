@@ -7,99 +7,83 @@
 
 namespace algo {
 
-template<typename T>
-class vector_stack: private vector<T> {
+template<typename T, template<typename> class C>
+class stack: public C<T> {
+	using B = C<T>;
+	using self = stack<T, C>;
 public:
-	vector_stack() = default;
-	vector_stack(const vector_stack<T>& v) = default;
-	vector_stack(vector_stack<T>&& v) = default;
-	~vector_stack() = default;
-	vector_stack<T>& operator=(const vector_stack<T>& v) = default;
-	vector_stack<T>& operator=(vector_stack<T>&& v) = default;
+	stack() = default;
+	stack(const self& v) = default;
+	stack(self&& v) = default;
+	~stack() = default;
+	self& operator=(const self& v) = default;
+	self& operator=(self&& v) = default;
 
 	bool empty() const {
-		return vector<T>::empty();
+		return B::empty();
 	}
 
 	size_t size() const {
-		return vector<T>::size();
+		return B::size();
 	}
 
 	void push(const T& val) {
-		vector<T>::push_back(val);
+		B::push_front(val);
 	}
 
 	T pop() {
-		T res = std::move(vector<T>::back());
-		vector<T>::pop_back();
+		T res = std::move(B::front());
+		B::pop_front();
 		return res;
 	}
 
 	const T& peek() const {
-		return vector<T>::back();
+		return B::front();
 	}
 };
 
 template<typename T>
-class list_stack: private list<T> {
+class stack<T, vector>: private vector<T> {
+	using B = vector<T>;
+	using self = stack<T, vector>;
 public:
-	list_stack() = default;
-	list_stack(const list_stack<T>& v) = default;
-	list_stack(list_stack<T>&& v) = default;
-	~list_stack() = default;
-	list_stack<T>& operator=(const list_stack<T>& v) = default;
-	list_stack<T>& operator=(list_stack<T>&& v) = default;
+	stack() = default;
+	stack(const self& v) = default;
+	stack(self&& v) = default;
+	~stack() = default;
+	self& operator=(const self& v) = default;
+	self& operator=(self&& v) = default;
 
 	bool empty() const {
-		return list<T>::empty();
+		return B::empty();
 	}
 
 	size_t size() const {
-		return list<T>::size();
+		return B::size();
 	}
 
 	void push(const T& val) {
-		list<T>::push_front(val);
+		B::push_back(val);
 	}
 
 	T pop() {
-		return list<T>::pop_front();
+		T res = std::move(B::back());
+		B::pop_back();
+		return res;
 	}
 
 	const T& peek() const {
-		return list<T>::front();
+		return B::back();
 	}
 };
 
 template<typename T>
-class dlist_stack: private dlist<T> {
-public:
-	dlist_stack() = default;
-	dlist_stack(const dlist_stack<T>& v) = default;
-	dlist_stack(dlist_stack<T>&& v) = default;
-	~dlist_stack() = default;
-	dlist_stack<T>& operator=(const dlist_stack<T>& v) = default;
-	dlist_stack<T>& operator=(dlist_stack<T>&& v) = default;
+using vector_stack = stack<T, vector>;
 
-	bool empty() const {
-		return dlist<T>::empty();
-	}
+template<typename T>
+using list_stack = stack<T, list>;
 
-	size_t size() const {
-		return dlist<T>::size();
-	}
-
-	void push(const T& val) {
-		dlist<T>::push_front(val);
-	}
-
-	T pop() {
-		return dlist<T>::pop_front();
-	}
-
-	const T& peek() const {
-		return dlist<T>::front();
-	}
-};
+template<typename T>
+using dlist_stack = stack<T, dlist>;
 
 }

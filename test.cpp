@@ -189,7 +189,7 @@ static void stack_test() {
 }
 
 static void stack_test() {
-	stack_test<vector_stack<int>>();
+	stack_test<stack<int, vector>>();
 	stack_test<list_stack<int>>();
 	stack_test<dlist_stack<int>>();
 }
@@ -300,14 +300,17 @@ static void sort_test() {
 }
 
 void tests() {
+	// datastructures
 	vector_test();
 	vector_view_test();
 	dlist_test();
 	list_test();
 	heap_test();
 
+	// interfaces
 	stack_test();
 
+	// algorithms
 	search_test();
 	sort_test();
 }

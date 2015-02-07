@@ -10,6 +10,8 @@ namespace algo {
 template<typename T>
 class list {
 public:
+	using type = T;
+
 	struct node {
 		friend class list;
 		node() = default;

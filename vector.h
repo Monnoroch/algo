@@ -9,6 +9,8 @@ namespace algo {
 template<typename T>
 class vector {
 public:
+	using type = T;
+
 	vector() = default;
 
 	vector(const vector<T>& v) {
