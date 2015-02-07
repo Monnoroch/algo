@@ -5,6 +5,9 @@
 #include "dlist.h"
 #include "heap.h"
 #include "pair.h"
+
+#include "stack.h"
+
 #include "search.h"
 #include "sort.h"
 
@@ -164,6 +167,33 @@ static void heap_test() {
 	}
 }
 
+template<typename ST>
+static void stack_test() {
+	ST stack;
+	assert(stack.empty());
+
+	stack.push(19);
+	stack.push(20);
+
+	ST stack1 = stack;
+	assert(stack1.size() == stack.size());
+	assert(stack1.peek() == stack.peek());
+
+	assert(!stack.empty());
+	assert(stack.size() == 2);
+	assert(stack.peek() == 20);
+	assert(stack.pop() == 20);
+	assert(stack.pop() == 19);
+	assert(stack.empty());
+
+}
+
+static void stack_test() {
+	stack_test<vector_stack<int>>();
+	stack_test<list_stack<int>>();
+	stack_test<dlist_stack<int>>();
+}
+
 static void search_test() {
 	const auto N = 1000;
 	{
@@ -275,6 +305,9 @@ void tests() {
 	dlist_test();
 	list_test();
 	heap_test();
+
+	stack_test();
+
 	search_test();
 	sort_test();
 }
