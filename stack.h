@@ -32,9 +32,7 @@ public:
 	}
 
 	T pop() {
-		T res = std::move(B::front());
-		B::pop_front();
-		return res;
+		return B::pop_front();
 	}
 
 	const T& peek() const {
