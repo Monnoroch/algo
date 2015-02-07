@@ -39,7 +39,7 @@ static void vector_test() {
 
 	const auto N = 1000;
 	const auto D = 100;
-	list<int> vec;
+	vector<int> vec;
 	for (size_t i = 0; i <= N; ++i) {
 		vec.push_back(i);
 	}
@@ -55,6 +55,10 @@ static void vector_test() {
 
 	assert(vec.size() == N - D + 1);
 	assert(vec.back() == N - D);
+
+	vector<int> vec1 = vec;
+	assert(vec1.size() == vec.size());
+	assert(vec1[7] == vec[7]);
 }
 
 static void vector_view_test() {
@@ -76,20 +80,24 @@ static void list_test() {
 	const auto D = 100;
 	list<int> lst;
 	for (size_t i = 0; i <= N; ++i) {
-		lst.push_back(i);
+		lst.push_front(i);
 	}
 
 	assert(lst.size() == N + 1);
-	assert(lst[0] == 0);
-	assert(lst[27] == 27);
-	assert(lst.back() == N);
+	assert(lst[0] == N);
+	assert(lst[27] == N - 27);
+	assert(lst.front() == N);
 
 	for (size_t i = 0; i < D; ++i) {
-		lst.pop_back();
+		lst.pop_front();
 	}
 
 	assert(lst.size() == N - D + 1);
-	assert(lst.back() == N - D);
+	assert(lst.front() == N - D);
+
+	list<int> lst1 = lst;
+	assert(lst1.size() == lst.size());
+	assert(lst1[7] == lst[7]);
 }
 
 static void dlist_test() {
@@ -111,6 +119,17 @@ static void dlist_test() {
 
 	assert(lst.size() == N - D + 1);
 	assert(lst.back() == N - D);
+
+	for (size_t i = 0; i < D; ++i) {
+		lst.pop_front();
+	}
+
+	assert(lst.size() == N - D - D + 1);
+	assert(lst.front() == D);
+
+	dlist<int> lst1 = lst;
+	assert(lst1.size() == lst.size());
+	assert(lst1[7] == lst[7]);
 }
 
 static void heap_test() {
@@ -119,6 +138,11 @@ static void heap_test() {
 	for (size_t i = 0; i <= N; ++i) {
 		h.push(i);
 	}
+
+	heap<int> h1 = h;
+	assert(h1.size() == h.size());
+	assert(h1.max() == h.max());
+
 	for (size_t i = 0; i <= N; ++i) {
 		assert(h.pop_max() == N - i);
 	}

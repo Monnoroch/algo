@@ -45,6 +45,51 @@ public:
 
 	dlist& operator=(dlist&&) = default;
 
+	void push_front(const T& val) {
+		head = std::make_unique<node>(val, std::move(head));
+		++len;
+	}
+
+	T pop_front() {
+		assert(len != 0);
+		auto tmp = std::move(head);
+		head = std::move(tmp->next);
+		--len;
+		if (len == 0) {
+			last = nullptr;
+		}
+		return tmp->val;
+	}
+
+	void push_front(dlist<T> v) {
+		push_front(std::move(v));
+	}
+
+	void push_front(dlist<T>&& v) {
+		if (v.empty()) {
+			return;
+		}
+
+		if (empty()) {
+			head = std::move(v.head);
+			last = std::move(v.last);
+			len = std::move(v.len);
+			return;
+		}
+
+		v.last->next = std::move(head);
+		head = std::move(v.head);
+		len += v.len;
+	}
+
+	const T& front() const {
+		return head->val;
+	}
+
+	T& front() {
+		return head->val;
+	}
+
 	void push_back(const T& val) {
 		if (head == nullptr) {
 			push_back_empty(val);

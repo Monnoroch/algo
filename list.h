@@ -43,43 +43,42 @@ public:
 
 	list& operator=(list&&) = default;
 
-	void push_back(const T& val) {
-		if (head == nullptr) {
-			push_back_empty(val);
-		}
-		else {
-			push_back_nonempty(val);
-		}
+	void push_front(const T& val) {
+		head = std::make_unique<node>(val, std::move(head));
+		++len;
 	}
 
-	void push_back(list<T> v) {
-		push_back(std::move(v));
+	T pop_front() {
+		assert(len != 0);
+		auto tmp = std::move(head);
+		head = std::move(tmp->next);
+		--len;
+		return tmp->val;
 	}
 
-	void push_back(list<T>&& v) {
-		if (head == nullptr) {
+	void push_front(list<T> v) {
+		push_front(std::move(v));
+	}
+
+	void push_front(list<T>&& v) {
+		if (v.empty()) {
+			return;
+		}
+
+		if (empty()) {
 			head = std::move(v.head);
-			last = std::move(v.last);
 			len = std::move(v.len);
 			return;
 		}
-		if (v.last == nullptr) {
-			return;
+
+		auto end = v.head;
+		while (end->next != nullptr) {
+			end = end->next;
 		}
-		last->next = std::move(v.head);
-		last = v.last;
+
+		end->next = std::move(head);
+		head = std::move(v.head);
 		len += v.len;
-	}
-
-	T pop_back() {
-		auto res = std::move(last->val);
-		fix_last(); // because it's single-linked
-		--len;
-		return res;
-	}
-
-	void insert(const T& v) {
-
 	}
 
 	bool empty() const {
@@ -92,16 +91,15 @@ public:
 
 	void swap(list<T>& r) {
 		std::swap(head, r.head);
-		std::swap(last, r.last);
 		std::swap(len, r.len);
 	}
 
-	const T& back() const {
-		return last->val;
+	const T& front() const {
+		return head->val;
 	}
 
-	T& back() {
-		return last->val;
+	T& front() {
+		return head->val;
 	}
 
 	const T& operator[](size_t n) const {
@@ -131,47 +129,22 @@ public:
 	}
 
 private:
-	void fix_last() {
-		auto * tmp = head.get();
-		while (tmp != nullptr) {
-			if (tmp->next.get() == last) {
-				last = tmp;
-				tmp->next = nullptr;
-				return;
-			}
-			tmp = tmp->next.get();
-		}
-		assert(false);
-	}
-
-	void push_back_empty(const T& val) {
-		head = std::make_unique<node>(val);
-		last = head.get();
-		++len;
-	}
-
-	void push_back_nonempty(const T& val) {
-		last->next = std::make_unique<node>(val);
-		last = last->next.get();
-		++len;
-	}
-
 	void set(const list<T>& r) {
 		if (r.empty()) {
 			return;
 		}
+		add_back(r.head);
+	}
 
-		const auto * tmp = r.head.get();
-		push_back_empty(tmp->val);
-		tmp = tmp->next.get();
-		while (tmp != nullptr) {
-			push_back_nonempty(tmp->val);
-			tmp = tmp->next.get();
+	void add_back(const std::unique_ptr<node>& node) {
+		if (node == nullptr) {
+			return;
 		}
+		add_back(node->next);
+		push_front(node->val);
 	}
 
 	std::unique_ptr<node> head{};
-	node * last{nullptr};
 	size_t len{0};
 };
 
