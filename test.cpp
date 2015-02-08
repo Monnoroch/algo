@@ -105,6 +105,20 @@ static void list_test() {
 }
 
 static void dlist_test() {
+	dlist<int> que;
+	assert(que.empty());
+
+	que.push_front(19);
+	que.push_front(20);
+	que.push_back(21);
+	que.push_back(22);
+
+	assert(que.pop_front() == 20);
+	assert(que.pop_front() == 19);
+	assert(que.pop_front() == 21);
+	assert(que.pop_back() == 22);
+	assert(que.empty());
+
 	const auto N = 1000;
 	const auto D = 100;
 	dlist<int> lst;

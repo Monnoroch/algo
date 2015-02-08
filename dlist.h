@@ -48,40 +48,28 @@ public:
 	dlist& operator=(dlist&&) = default;
 
 	void push_front(const T& val) {
-		head = std::make_unique<node>(val, std::move(head));
-		++len;
+		if (empty()) {
+			push_first(val);
+		}
+		else {
+			head = std::make_unique<node>(val, std::move(head));
+			head->next->prev = head.get();
+			++len;
+		}
 	}
 
 	T pop_front() {
 		assert(len != 0);
 		auto tmp = std::move(head);
-		head = std::move(tmp->next);
 		--len;
 		if (len == 0) {
 			last = nullptr;
+			return tmp->val;
 		}
+
+		head = std::move(tmp->next);
+		head->prev = nullptr;
 		return tmp->val;
-	}
-
-	void push_front(dlist v) {
-		push_front(std::move(v));
-	}
-
-	void push_front(dlist&& v) {
-		if (v.empty()) {
-			return;
-		}
-
-		if (empty()) {
-			head = std::move(v.head);
-			last = std::move(v.last);
-			len = std::move(v.len);
-			return;
-		}
-
-		v.last->next = std::move(head);
-		head = std::move(v.head);
-		len += v.len;
 	}
 
 	const T& front() const {
@@ -93,8 +81,8 @@ public:
 	}
 
 	void push_back(const T& val) {
-		if (head == nullptr) {
-			push_back_empty(val);
+		if (empty()) {
+			push_first(val);
 		}
 		else {
 			push_back_nonempty(val);
@@ -121,15 +109,18 @@ public:
 	}
 
 	T pop_back() {
-		auto res = std::move(last->val);
-		last->prev->next = nullptr;
+		assert(len != 0);
+		if (len == 1) {
+			auto tmp = std::move(head);
+			last = nullptr;
+			len = 0;
+			return tmp->val;
+		}
+
+		auto tmp = std::move(last->prev->next);
 		last = last->prev;
 		--len;
-		return res;
-	}
-
-	void insert(const T& v) {
-
+		return tmp->val;
 	}
 
 	bool empty() const {
@@ -181,15 +172,14 @@ public:
 	}
 
 private:
-	void push_back_empty(const T& val) {
+	void push_first(const T& val) {
 		head = std::make_unique<node>(val);
 		last = head.get();
 		++len;
 	}
 
 	void push_back_nonempty(const T& val) {
-		last->next = std::make_unique<node>(val);
-		last->next->prev = last;
+		last->next = std::make_unique<node>(val, nullptr, last);
 		last = last->next.get();
 		++len;
 	}
@@ -200,7 +190,7 @@ private:
 		}
 
 		const auto * tmp = r.head.get();
-		push_back_empty(tmp->val);
+		push_first(tmp->val);
 		tmp = tmp->next.get();
 		while (tmp != nullptr) {
 			push_back_nonempty(tmp->val);
