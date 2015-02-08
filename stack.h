@@ -8,7 +8,7 @@
 namespace algo {
 
 template<typename T, template<typename> class C>
-class stack: public C<T> {
+class stack: private C<T> {
 	using B = C<T>;
 public:
 	stack() = default;
