@@ -8,6 +8,7 @@
 #include "pair.h"
 
 #include "stack.h"
+#include "queue.h"
 
 #include "search.h"
 #include "sort.h"
@@ -244,6 +245,30 @@ static void stack_test() {
 	stack_test<dlist_stack<int>>();
 }
 
+static void queue_test() {
+	queue<int> que;
+	assert(que.empty());
+
+	que.push_front(19);
+	que.push_front(20);
+	que.push_back(21);
+	que.push_back(22);
+
+	queue<int> que1 = que;
+	assert(que1.size() == que.size());
+	assert(que1.peek_front() == que.peek_front());
+
+	assert(!que.empty());
+	assert(que.size() == 4);
+	assert(que.peek_front() == 20);
+	assert(que.peek_back() == 22);
+	assert(que.pop_front() == 20);
+	assert(que.pop_front() == 19);
+	assert(que.pop_front() == 21);
+	assert(que.pop_back() == 22);
+	assert(que.empty());
+}
+
 static void search_test() {
 	const auto N = 1000;
 	{
@@ -360,6 +385,7 @@ void tests() {
 
 	// interfaces
 	stack_test();
+	queue_test();
 
 	// algorithms
 	search_test();
