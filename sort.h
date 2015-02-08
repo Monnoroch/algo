@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "vector.h"
+#include "vector_view.h"
 #include "heap.h"
 
 
@@ -219,7 +220,7 @@ void heap_sort(vector<T>& v) {
 
 /// T can only be an integer type
 template<typename T>
-void counting_sort(vector<T>& v, T min, T max) {
+void counting_sort(vector_view<T> v, T min, T max) {
 	size_t counts[max - min + 1];
 	for (size_t i = 0; i < max - min; ++i) {
 		counts[i] = 0;
@@ -242,12 +243,21 @@ void counting_sort(vector<T>& v, T min, T max) {
 		out[counts[key]] = v[i];
 		++counts[key];
 	}
-	v = out;
+
+	for (size_t i = 0; i < out.size(); ++i) {
+		v[i] = out[i];
+	}
 }
 
 /// T can only be an integer type
 template<typename T>
-void counting_sort(vector<T>& v) {
+void counting_sort(vector<T>& v, T min, T max) {
+	return counting_sort(v.view(), min, max);
+}
+
+/// T can only be an integer type
+template<typename T>
+void counting_sort(vector_view<T> v) {
 	auto min = v[0];
 	auto max = v[0];
 	for (size_t i = 1; i < v.size(); ++i) {
@@ -259,6 +269,12 @@ void counting_sort(vector<T>& v) {
 		}
 	}
 	return counting_sort(v, min, max);
+}
+
+/// T can only be an integer type
+template<typename T>
+void counting_sort(vector<T>& v) {
+	return counting_sort(v.view());
 }
 
 /// T can only be an integer type
@@ -295,6 +311,52 @@ void lsd_radix_sort(vector<T>& v) {
 }
 
 /// T can only be an integer type
+template<typename T>
+void msd_radix_sort_bin(vector_view<T> v, size_t maxd, T max) {
+	const auto Base = 2;
+	if (v.size() < 2) {
+		return;
+	}
+
+	if (maxd == 0) {
+		counting_sort(v);
+		return;
+	}
+
+	int i = 0;
+	int j = static_cast<int>(v.size()) - 1;
+	while (i <= j) {
+		while (i < v.size() && (v[i] / max) % Base == 0) {
+			++i;
+		}
+		while (j >= 0 && (v[j] / max) % Base == 1) {
+			--j;
+		}
+		if (i < j) {
+			std::swap(v[i], v[j]);
+		}
+		if (i <= j) {
+			++i;
+			--j;
+		}
+	}
+
+	if (i < v.size()) {
+		msd_radix_sort_bin<T>(v.view(i), maxd - 1, max / Base);
+	}
+
+	if (j != 0) {
+		msd_radix_sort_bin<T>(v.view(0, j + 1), maxd - 1, max / Base);
+	}
+}
+
+/// T can only be an integer type
+template<typename T>
+void msd_radix_sort_bin(vector<T>& v, size_t maxd, T max) {
+	return msd_radix_sort_bin<T>(v.view(), maxd, max);
+}
+
+/// T can only be an integer type
 template<typename T, size_t Base = 10>
 void msd_radix_sort(vector<T>& v, size_t maxd, T max) {
 	if (v.size() < 2) {
@@ -309,7 +371,8 @@ void msd_radix_sort(vector<T>& v, size_t maxd, T max) {
 	vector<T> buckets[Base];
 	for (size_t i = 0; i < v.size(); ++i) {
 		const auto& val = v[i];
-		buckets[(val / max) % Base].push_back(val);
+		const auto digit = (val / max) % Base;
+		buckets[digit].push_back(val);
 	}
 
 	size_t cnt = 0;
@@ -338,7 +401,12 @@ void msd_radix_sort(vector<T>& v) {
 		num *= Base;
 		++cnt;
 	}
-	return msd_radix_sort<T, Base>(v, cnt - 1, static_cast<T>(num / Base));
+	if (Base == 2) {
+		msd_radix_sort_bin<T>(v, cnt - 1, static_cast<T>(num / Base));
+	}
+	else {
+		msd_radix_sort<T, Base>(v, cnt - 1, static_cast<T>(num / Base));
+	}
 }
 
 }

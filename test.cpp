@@ -365,7 +365,19 @@ static void sort_test(const vector<T>& vec, bool sorted = false) {
 	}
 	{
 		auto tmp = vec;
+		lsd_radix_sort<T, 2>(tmp);
+		assert(check_sorted(tmp));
+		assert(tmp == correct);
+	}
+	{
+		auto tmp = vec;
 		msd_radix_sort(tmp);
+		assert(check_sorted(tmp));
+		assert(tmp == correct);
+	}
+	{
+		auto tmp = vec;
+		msd_radix_sort<T, 2>(tmp);
 		assert(check_sorted(tmp));
 		assert(tmp == correct);
 	}
