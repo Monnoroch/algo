@@ -312,14 +312,9 @@ void lsd_radix_sort(vector<T>& v) {
 
 /// T can only be an integer type
 template<typename T>
-void msd_radix_sort_bin(vector_view<T> v, size_t maxd, T max) {
+void msd_radix_sort_bin(vector_view<T> v, int maxd, T max) {
 	const auto Base = 2;
-	if (v.size() < 2) {
-		return;
-	}
-
-	if (maxd == 0) {
-		counting_sort(v);
+	if (v.size() < 2 || maxd < 0) {
 		return;
 	}
 
@@ -352,19 +347,14 @@ void msd_radix_sort_bin(vector_view<T> v, size_t maxd, T max) {
 
 /// T can only be an integer type
 template<typename T>
-void msd_radix_sort_bin(vector<T>& v, size_t maxd, T max) {
+void msd_radix_sort_bin(vector<T>& v, int maxd, T max) {
 	return msd_radix_sort_bin<T>(v.view(), maxd, max);
 }
 
 /// T can only be an integer type
 template<typename T, size_t Base = 10>
-void msd_radix_sort(vector<T>& v, size_t maxd, T max) {
-	if (v.size() < 2) {
-		return;
-	}
-
-	if (maxd == 0) {
-		counting_sort(v);
+void msd_radix_sort(vector<T>& v, int maxd, T max) {
+	if (v.size() < 2 || maxd < 0) {
 		return;
 	}
 
@@ -396,7 +386,7 @@ void msd_radix_sort(vector<T>& v) {
 		}
 	}
 	T num = 1;
-	size_t cnt = 0;
+	int cnt = 0;
 	while (num <= max) {
 		num *= Base;
 		++cnt;
