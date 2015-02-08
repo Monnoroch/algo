@@ -4,6 +4,7 @@
 #include "list.h"
 #include "dlist.h"
 #include "heap.h"
+#include "limited_heap.h"
 #include "pair.h"
 
 #include "stack.h"
@@ -167,6 +168,41 @@ static void heap_test() {
 	}
 }
 
+static void limited_heap_test() {
+	const auto N = 1000;
+	const auto cnt = 200;
+	limited_heap<int> h(cnt);
+	for (size_t i = 0; i <= N; ++i) {
+		h.push(i);
+	}
+	assert(h.size() == cnt);
+	assert(h.max() == cnt - 1);
+
+	limited_heap<int> h1 = h;
+	assert(h1.size() == h.size());
+	assert(h1.max() == h.max());
+
+	for (size_t i = 0; i < cnt; ++i) {
+		assert(h.pop_max() == cnt - i - 1);
+	}
+
+	struct data {
+		data() = default;
+		data(int v_) : v(v_) {}
+		int v{0};
+	};
+
+	limited_heap<pair<int, data>> hd(cnt);
+	for (size_t i = 0; i <= N; ++i) {
+		hd.push(i, N - i);
+	}
+	for (size_t i = 0; i < cnt; ++i) {
+		auto max = hd.pop_max();
+		assert(max.first == cnt - i - 1);
+		assert(max.second.v == N - (cnt - i - 1));
+	}
+}
+
 template<typename ST>
 static void stack_test() {
 	ST stack;
@@ -306,6 +342,7 @@ void tests() {
 	dlist_test();
 	list_test();
 	heap_test();
+	limited_heap_test();
 
 	// interfaces
 	stack_test();
