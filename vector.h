@@ -139,6 +139,22 @@ public:
 		std::swap(arr, v.arr);
 	}
 
+	bool operator==(const vector& r) const {
+		if (len != r.len) {
+			return false;
+		}
+		for (size_t i = 0; i < len; ++i) {
+			if (arr[i] != r.arr[i]) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	bool operator!=(const vector& r) const {
+		return !(*this == r);
+	}
+
 private:
 	void drop() {
 		delete [] arr;

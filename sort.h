@@ -291,7 +291,54 @@ void lsd_radix_sort(vector<T>& v) {
 			max = v[i];
 		}
 	}
-	return lsd_radix_sort(v, max);
+	return lsd_radix_sort<T, Base>(v, max);
+}
+
+/// T can only be an integer type
+template<typename T, size_t Base = 10>
+void msd_radix_sort(vector<T>& v, size_t maxd, T max) {
+	if (v.size() < 2) {
+		return;
+	}
+
+	if (maxd == 0) {
+		counting_sort(v);
+		return;
+	}
+
+	vector<T> buckets[Base];
+	for (size_t i = 0; i < v.size(); ++i) {
+		const auto& val = v[i];
+		buckets[(val / max) % Base].push_back(val);
+	}
+
+	size_t cnt = 0;
+	for (size_t i = 0; i < Base; ++i) {
+		auto& bucket = buckets[i];
+		msd_radix_sort<T, Base>(bucket, maxd - 1, max / Base);
+		for (size_t j = 0; j < bucket.size(); ++j) {
+			v[cnt] = bucket[j];
+			++cnt;
+		}
+	}
+}
+
+/// T can only be an integer type
+template<typename T, size_t Base = 10>
+void msd_radix_sort(vector<T>& v) {
+	auto max = v[0];
+	for (size_t i = 1; i < v.size(); ++i) {
+		if (v[i] > max) {
+			max = v[i];
+		}
+	}
+	T num = 1;
+	size_t cnt = 0;
+	while (num <= max) {
+		num *= Base;
+		++cnt;
+	}
+	return msd_radix_sort<T, Base>(v, cnt - 1, static_cast<T>(num / Base));
 }
 
 }

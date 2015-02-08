@@ -296,60 +296,78 @@ static void search_test() {
 template<typename T>
 static void sort_test(const vector<T>& vec, bool sorted = false) {
 	assert(sorted == check_sorted(vec));
+	vector<T> correct;
 	{
 		auto tmp = vec;
 		selection_sort(tmp);
 		assert(check_sorted(tmp));
+		correct = tmp;
 	}
 	{
 		auto tmp = vec;
 		insertion_sort(tmp);
 		assert(check_sorted(tmp));
+		assert(tmp == correct);
 	}
 	{
 		auto tmp = vec;
 		bubble_sort(tmp);
 		assert(check_sorted(tmp));
+		assert(tmp == correct);
 	}
 	{
 		auto tmp = vec;
 		merge_sort(tmp);
 		assert(check_sorted(tmp));
+		assert(tmp == correct);
 	}
 	{
 		auto tmp = vec;
 		copy_quick_sort(tmp);
 		assert(check_sorted(tmp));
+		assert(tmp == correct);
 	}
 	{
 		auto tmp = vec;
 		copy_quick_sort(tmp, middle_pivot_strategy<int>);
 		assert(check_sorted(tmp));
+		assert(tmp == correct);
 	}
 	{
 		auto tmp = vec;
 		quick_sort(tmp);
 		assert(check_sorted(tmp));
+		assert(tmp == correct);
 	}
 	{
 		auto tmp = vec;
 		quick_sort(tmp, middle_pivot_strategy<int>);
 		assert(check_sorted(tmp));
+		assert(tmp == correct);
 	}
 	{
 		auto tmp = vec;
 		heap_sort(tmp);
 		assert(check_sorted(tmp));
+		assert(tmp == correct);
 	}
 	{
 		auto tmp = vec;
 		counting_sort(tmp);
 		assert(check_sorted(tmp));
+		assert(tmp == correct);
 	}
 	{
 		auto tmp = vec;
 		lsd_radix_sort(tmp);
 		assert(check_sorted(tmp));
+		assert(tmp == correct);
+	}
+	{
+		auto tmp = vec;
+		msd_radix_sort(tmp);
+		assert(check_sorted(tmp));
+		assert(tmp == correct);
 	}
 }
 
