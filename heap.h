@@ -32,9 +32,13 @@ public:
 	T pop_max() {
 		assert(!empty());
 		auto res = std::move(data[0]);
-		data[0] = std::move(data.back());
+		if (data.size() != 1) {
+			data[0] = std::move(data.back());
+		}
 		data.pop_back();
-		heapify(0);
+		if (!empty()) {
+			heapify(0);
+		}
 		return res;
 	}
 
@@ -102,14 +106,14 @@ template<typename K, typename V>
 class heap<pair<K, V>> {
 	using T = pair<K, V>;
 public:
-	using type = T;
-
 	void push(const K& key, const V& value) {
 		push(pair<K, V>(key, value));
 	}
 
 	// code from here is the exact copy of a generic heap template.
 public:
+	using type = T;
+
 	heap() = default;
 	heap(const heap&) = default;
 	heap(heap&&) = default;
@@ -128,9 +132,13 @@ public:
 	T pop_max() {
 		assert(!empty());
 		auto res = std::move(data[0]);
-		data[0] = std::move(data.back());
+		if (data.size() != 1) {
+			data[0] = std::move(data.back());
+		}
 		data.pop_back();
-		heapify(0);
+		if (!empty()) {
+			heapify(0);
+		}
 		return res;
 	}
 
