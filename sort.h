@@ -217,6 +217,7 @@ void heap_sort(vector<T>& v) {
 	}
 }
 
+/// T can only be an integer type
 template<typename T>
 void counting_sort(vector<T>& v, T min, T max) {
 	size_t counts[max - min + 1];
@@ -244,6 +245,7 @@ void counting_sort(vector<T>& v, T min, T max) {
 	v = out;
 }
 
+/// T can only be an integer type
 template<typename T>
 void counting_sort(vector<T>& v) {
 	auto min = v[0];
@@ -257,6 +259,39 @@ void counting_sort(vector<T>& v) {
 		}
 	}
 	return counting_sort(v, min, max);
+}
+
+/// T can only be an integer type
+template<typename T, size_t Base = 10>
+void radix_sort(vector<T>& v, T max) {
+	for (size_t num = 1; num <= max; num *= Base) {
+		vector<T> buckets[Base];
+		for (size_t i = 0; i < v.size(); ++i) {
+			const auto& val = v[i];
+			buckets[(val / num) % Base].push_back(val);
+		}
+
+		size_t cnt = 0;
+		for (size_t i = 0; i < Base; ++i) {
+			const auto& bucket = buckets[i];
+			for (size_t k = 0; k < bucket.size(); ++k) {
+				v[cnt] = bucket[k];
+				++cnt;
+			}
+		}
+	}
+}
+
+/// T can only be an integer type
+template<typename T, size_t Base = 10>
+void radix_sort(vector<T>& v) {
+	auto max = v[0];
+	for (size_t i = 1; i < v.size(); ++i) {
+		if (v[i] > max) {
+			max = v[i];
+		}
+	}
+	return radix_sort(v, max);
 }
 
 }

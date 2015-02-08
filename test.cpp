@@ -346,12 +346,17 @@ static void sort_test(const vector<T>& vec, bool sorted = false) {
 		counting_sort(tmp);
 		assert(check_sorted(tmp));
 	}
+	{
+		auto tmp = vec;
+		radix_sort(tmp);
+		assert(check_sorted(tmp));
+	}
 }
 
 static void sort_test() {
 	const auto N = 1000;
-	{
 
+	{
 		vector<int> vec;
 		for (size_t i = 0; i <= N; ++i) {
 			vec.push_back(i);
@@ -370,6 +375,28 @@ static void sort_test() {
 		for (size_t i = 0; i <= N; ++i) {
 			vec.push_back(rand() % 1000);
 		}
+		sort_test(vec);
+	}
+	{
+		vector<int> vec;
+		vec.push_back(796);
+		vec.push_back(723);
+		vec.push_back(618);
+		vec.push_back(245);
+		vec.push_back(846);
+		vec.push_back(451);
+		vec.push_back(921);
+		vec.push_back(555);
+		vec.push_back(379);
+		vec.push_back(488);
+		vec.push_back(764);
+		vec.push_back(228);
+		vec.push_back(841);
+		vec.push_back(350);
+		vec.push_back(193);
+		vec.push_back(500);
+		vec.push_back(34);
+		vec.push_back(764);
 		sort_test(vec);
 	}
 }
