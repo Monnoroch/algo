@@ -115,7 +115,7 @@ T random_pivot_strategy(vector_view<T> v) {
 }
 
 template<typename T, typename PS>
-void quick_sort(vector_view<T> v, PS&& ps) {
+void copy_quick_sort(vector_view<T> v, PS&& ps) {
 	if (v.size() <= 1) {
 		return;
 	}
@@ -138,10 +138,10 @@ void quick_sort(vector_view<T> v, PS&& ps) {
 	}
 
 	if (left.size() != 0) {
-		quick_sort(left, ps);
+		copy_quick_sort(left, ps);
 	}
 	if (right.size() != 0) {
-		quick_sort(right, ps);
+		copy_quick_sort(right, ps);
 	}
 
 	for (size_t i = 0; i < left.size(); ++i) {
@@ -156,17 +156,17 @@ void quick_sort(vector_view<T> v, PS&& ps) {
 }
 
 template<typename T, typename PS>
-void quick_sort(vector<T>& v, PS&& ps) {
-	quick_sort(v.view(), std::forward<PS>(ps));
+void copy_quick_sort(vector<T>& v, PS&& ps) {
+	copy_quick_sort(v.view(), std::forward<PS>(ps));
 }
 
 template<typename T>
-void quick_sort(vector<T>& v) {
-	quick_sort(v, random_pivot_strategy<T>);
+void copy_quick_sort(vector<T>& v) {
+	copy_quick_sort(v, random_pivot_strategy<T>);
 }
 
 template<typename T, typename PS>
-void nocopy_quick_sort(vector_view<T> v, PS&& ps) {
+void quick_sort(vector_view<T> v, PS&& ps) {
 	if (v.size() <= 1) {
 		return;
 	}
@@ -200,13 +200,13 @@ void nocopy_quick_sort(vector_view<T> v, PS&& ps) {
 }
 
 template<typename T, typename PS>
-void nocopy_quick_sort(vector<T>& v, PS&& ps) {
-	nocopy_quick_sort(v.view(), std::forward<PS>(ps));
+void quick_sort(vector<T>& v, PS&& ps) {
+	quick_sort(v.view(), std::forward<PS>(ps));
 }
 
 template<typename T>
-void nocopy_quick_sort(vector<T>& v) {
-	nocopy_quick_sort(v, random_pivot_strategy<T>);
+void quick_sort(vector<T>& v) {
+	quick_sort(v, random_pivot_strategy<T>);
 }
 
 template<typename T>
@@ -263,7 +263,7 @@ void counting_sort(vector<T>& v) {
 
 /// T can only be an integer type
 template<typename T, size_t Base = 10>
-void radix_sort(vector<T>& v, T max) {
+void lsd_radix_sort(vector<T>& v, T max) {
 	for (size_t num = 1; num <= max; num *= Base) {
 		vector<T> buckets[Base];
 		for (size_t i = 0; i < v.size(); ++i) {
@@ -284,14 +284,14 @@ void radix_sort(vector<T>& v, T max) {
 
 /// T can only be an integer type
 template<typename T, size_t Base = 10>
-void radix_sort(vector<T>& v) {
+void lsd_radix_sort(vector<T>& v) {
 	auto max = v[0];
 	for (size_t i = 1; i < v.size(); ++i) {
 		if (v[i] > max) {
 			max = v[i];
 		}
 	}
-	return radix_sort(v, max);
+	return lsd_radix_sort(v, max);
 }
 
 }

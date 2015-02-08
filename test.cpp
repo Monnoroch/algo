@@ -318,22 +318,22 @@ static void sort_test(const vector<T>& vec, bool sorted = false) {
 	}
 	{
 		auto tmp = vec;
+		copy_quick_sort(tmp);
+		assert(check_sorted(tmp));
+	}
+	{
+		auto tmp = vec;
+		copy_quick_sort(tmp, middle_pivot_strategy<int>);
+		assert(check_sorted(tmp));
+	}
+	{
+		auto tmp = vec;
 		quick_sort(tmp);
 		assert(check_sorted(tmp));
 	}
 	{
 		auto tmp = vec;
 		quick_sort(tmp, middle_pivot_strategy<int>);
-		assert(check_sorted(tmp));
-	}
-	{
-		auto tmp = vec;
-		nocopy_quick_sort(tmp);
-		assert(check_sorted(tmp));
-	}
-	{
-		auto tmp = vec;
-		nocopy_quick_sort(tmp, middle_pivot_strategy<int>);
 		assert(check_sorted(tmp));
 	}
 	{
@@ -348,7 +348,7 @@ static void sort_test(const vector<T>& vec, bool sorted = false) {
 	}
 	{
 		auto tmp = vec;
-		radix_sort(tmp);
+		lsd_radix_sort(tmp);
 		assert(check_sorted(tmp));
 	}
 }
