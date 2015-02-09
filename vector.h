@@ -71,11 +71,23 @@ public:
 	}
 
 	const T& back() const {
+		assert(!empty());
 		return arr[len - 1];
 	}
 
 	T& back()  {
+		assert(!empty());
 		return arr[len - 1];
+	}
+
+	const T& front() const {
+		assert(!empty());
+		return arr[0];
+	}
+
+	T& front()  {
+		assert(!empty());
+		return arr[0];
 	}
 
 	void pop_back() {
@@ -104,6 +116,13 @@ public:
 		}
 		arr[pos] = val;
 		++len;
+	}
+
+	void remove(size_t pos) {
+		for (size_t i = pos; i < len; ++i) {
+			arr[i] = arr[i + 1];
+		}
+		--len;
 	}
 
 	void clear() {
