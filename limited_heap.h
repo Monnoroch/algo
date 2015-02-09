@@ -54,11 +54,6 @@ public:
 		return data.empty();
 	}
 
-	void swap(limited_heap& h) {
-		std::swap(data, h.data);
-		std::swap(N, h.N);
-	}
-
 	size_t size() const {
 		return data.size();
 	}
@@ -72,6 +67,12 @@ public:
 			(void) pop_max();
 		}
 		N = n;
+	}
+
+	void swap(limited_heap& r) {
+		using std::swap;
+		swap(N, r.N);
+		swap(data, r.data);
 	}
 
 private:

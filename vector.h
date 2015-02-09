@@ -134,9 +134,10 @@ public:
 	}
 
 	void swap(vector& v) {
-		std::swap(len, v.len);
-		std::swap(cap, v.cap);
-		std::swap(arr, v.arr);
+		using std::swap;
+		swap(len, v.len);
+		swap(cap, v.cap);
+		swap(arr, v.arr);
 	}
 
 	bool operator==(const vector& r) const {

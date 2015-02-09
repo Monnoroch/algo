@@ -61,7 +61,8 @@ public:
 	}
 
 	void swap(heap& h) {
-		std::swap(data, h.data);
+		using std::swap;
+		swap(data, h.data);
 	}
 
 	size_t size() const {

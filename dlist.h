@@ -131,12 +131,6 @@ public:
 		return len;
 	}
 
-	void swap(dlist& r) {
-		std::swap(head, r.head);
-		std::swap(last, r.last);
-		std::swap(len, r.len);
-	}
-
 	const T& back() const {
 		return last->val;
 	}
@@ -169,6 +163,13 @@ public:
 			--n;
 		}
 		assert(false);
+	}
+
+	void swap(dlist& r) {
+		using std::swap;
+		swap(head, r.head);
+		swap(last, r.last);
+		swap(len, r.len);
 	}
 
 private:

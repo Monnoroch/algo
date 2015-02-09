@@ -91,11 +91,6 @@ public:
 		return len;
 	}
 
-	void swap(list& r) {
-		std::swap(head, r.head);
-		std::swap(len, r.len);
-	}
-
 	const T& front() const {
 		return head->val;
 	}
@@ -128,6 +123,12 @@ public:
 			--n;
 		}
 		assert(false);
+	}
+
+	void swap(list& r) {
+		using std::swap;
+		swap(head, r.head);
+		swap(len, r.len);
 	}
 
 private:
