@@ -1,11 +1,12 @@
 #include "test.h"
+#include "pair.h"
 #include "vector.h"
 #include "vector_view.h"
 #include "list.h"
 #include "dlist.h"
 #include "heap.h"
 #include "limited_heap.h"
-#include "pair.h"
+#include "search_tree.h"
 
 #include "stack.h"
 #include "queue.h"
@@ -216,6 +217,71 @@ static void limited_heap_test() {
 		assert(max.first == cnt - i - 1);
 		assert(max.second.v == N - (cnt - i - 1));
 	}
+}
+
+static void search_tree_test() {
+	const auto N = 1000;
+	const auto K = 100;
+	binary_tree<int> tree;
+	assert(tree.empty());
+	assert(tree.find(10) == nullptr);
+	assert(tree.min() == nullptr);
+
+	auto min = N + 1;
+	auto max = 0;
+	auto len = N;
+	auto len2 = N;
+
+	vector<int> set;
+
+	vector<int> to_rem;
+	const auto v = [&]() {
+		for (size_t i = 0; i < N; ++i) {
+			const auto v = rand() % N;
+			if (v > max) {
+				max = v;
+			}
+			if (v < min) {
+				min = v;
+			}
+
+			if (i < K || i >= N - K) {
+				to_rem.push_back(v);
+			}
+
+			if (!tree.insert(v)) {
+				--len;
+				--len2;
+			}
+			else {
+				set.push_back(v);
+			}
+		}
+		return 0;
+	}();
+
+	quick_sort(set);
+
+	assert(tree.size() == len);
+	assert(*tree.min() == min);
+	assert(*tree.max() == max);
+
+	for (size_t i = 0; i < to_rem.size(); ++i) {
+		if (tree.remove(to_rem[i])) {
+			--len2;
+			int * val = nullptr;
+			while ((val = binary_search(set, to_rem[i])) != nullptr) {
+				set.remove(val - &set[0]);
+			}
+		}
+	}
+
+	const auto min2 = set.front();
+	const auto max2 = set.back();
+
+	assert(tree.size() == len2);
+	assert(*tree.min() == min2);
+	assert(*tree.max() == max2);
 }
 
 template<typename ST>
@@ -439,6 +505,7 @@ void tests() {
 	list_test();
 	heap_test();
 	limited_heap_test();
+	search_tree_test();
 
 	// interfaces
 	stack_test();
