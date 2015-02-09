@@ -25,10 +25,6 @@ public:
 		return B::size();
 	}
 
-	void push_front(const T& val) {
-		B::push_front(val);
-	}
-
 	T pop_front() {
 		return B::pop_front();
 	}
@@ -39,14 +35,6 @@ public:
 
 	void push_back(const T& val) {
 		B::push_back(val);
-	}
-
-	T pop_back() {
-		return B::pop_back();
-	}
-
-	const T& peek_back() const {
-		return B::back();
 	}
 };
 
