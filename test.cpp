@@ -174,7 +174,7 @@ static void heap_test() {
  		int v{0};
 	};
 
-	heap<pair<int, data>> hd;
+	heap_map<int, data> hd;
 	for (size_t i = 0; i <= N; ++i) {
 		hd.push(i, N - i);
 	}
